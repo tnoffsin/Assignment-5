@@ -1,0 +1,340 @@
+tnoffsin: Without using outside libraries or sources. Write a function that determines the highest loan_amnts and lowest loan_amnts in the dataset.
+
+GitHub Copilot: ### Plan
+
+1. Read the CSV data from the string.
+2. Split the data into lines.
+3. Extract the header and data rows.
+4. Parse the [`loan_amnt`](command:_github.copilot.openSymbolFromReferences?%5B%22%22%2C%5B%7B%22uri%22%3A%7B%22scheme%22%3A%22file%22%2C%22authority%22%3A%22%22%2C%22path%22%3A%22%2FC%3A%2FUsers%2Fthoma%2FDownloads%2Fimproved%20dataset%2Fimproved%20dataset.csv%22%2C%22query%22%3A%22%22%2C%22fragment%22%3A%22%22%7D%2C%22pos%22%3A%7B%22line%22%3A0%2C%22character%22%3A99%7D%7D%5D%2C%2265b128ee-1e84-4d81-953c-fefd543554c1%22%5D "Go to definition") values from each row.
+5. Determine the highest and lowest [`loan_amnt`](command:_github.copilot.openSymbolFromReferences?%5B%22%22%2C%5B%7B%22uri%22%3A%7B%22scheme%22%3A%22file%22%2C%22authority%22%3A%22%22%2C%22path%22%3A%22%2FC%3A%2FUsers%2Fthoma%2FDownloads%2Fimproved%20dataset%2Fimproved%20dataset.csv%22%2C%22query%22%3A%22%22%2C%22fragment%22%3A%22%22%7D%2C%22pos%22%3A%7B%22line%22%3A0%2C%22character%22%3A99%7D%7D%5D%2C%2265b128ee-1e84-4d81-953c-fefd543554c1%22%5D "Go to definition") values.
+6. Return the highest and lowest values.
+
+### Code
+
+```python
+def find_highest_and_lowest_loan_amnts(data):
+    # Split the data into lines
+    lines = data.strip().split('\n')
+    
+    # Extract the header and data rows
+    header = lines[0].split(',')
+    data_rows = lines[1:]
+    
+    # Find the index of the loan_amnt column
+    loan_amnt_index = header.index('loan_amnt')
+    
+    # Initialize variables to store the highest and lowest loan amounts
+    highest_loan_amnt = float('-inf')
+    lowest_loan_amnt = float('inf')
+    
+    # Iterate over each data row
+    for row in data_rows:
+        # Split the row into columns
+        columns = row.split(',')
+        
+        # Get the loan_amnt value and convert it to an integer
+        loan_amnt = int(columns[loan_amnt_index])
+        
+        # Update the highest and lowest loan amounts
+        if loan_amnt > highest_loan_amnt:
+            highest_loan_amnt = loan_amnt
+        if loan_amnt < lowest_loan_amnt:
+            lowest_loan_amnt = loan_amnt
+    
+    return highest_loan_amnt, lowest_loan_amnt
+
+# Example usage
+data = """customer_id,customer_age,customer_income,home_ownership,employment_duration,loan_intent,loan_grade,loan_amnt,loan_int_rate,term_years,historical_default,cred_hist_length,Current_loan_status
+1,22,59000,RENT,123,PERSONAL,C,35000,16.02,10,Y,3,DEFAULT
+2,21,9600,OWN,5,EDUCATION,A,1000,11.14,1,,2,NO DEFAULT
+3,25,9600,MORTGAGE,1,MEDICAL,B,5500,12.87,5,N,3,DEFAULT
+4,23,65500,RENT,4,MEDICAL,B,35000,15.23,10,N,2,DEFAULT
+5,24,54400,RENT,8,MEDICAL,B,35000,14.27,10,Y,4,DEFAULT
+6,21,9900,OWN,2,VENTURE,A,2500,7.14,1,N,2,DEFAULT
+7,26,77100,RENT,8,EDUCATION,A,35000,12.42,10,,3,NO DEFAULT
+8,24,78956,RENT,5,MEDICAL,A,35000,11.11,10,,4,NO DEFAULT
+9,24,83000,RENT,8,PERSONAL,A,35000,8.9,10,,2,NO DEFAULT
+10,21,10000,OWN,6,VENTURE,C,1600,14.74,1,N,3,DEFAULT
+11,22,85000,RENT,6,VENTURE,A,35000,10.37,10,,4,NO DEFAULT
+12,21,10000,OWN,2,HOMEIMPROVEMENT,A,4500,8.63,1,N,2,DEFAULT
+13,23,95000,RENT,2,VENTURE,A,35000,7.9,10,,2,NO DEFAULT
+14,26,108160,RENT,4,EDUCATION,D,35000,18.39,10,N,4,DEFAULT
+15,23,115000,RENT,2,EDUCATION,A,35000,7.9,10,,4,NO DEFAULT
+16,23,500000,MORTGAGE,7,DEBTCONSOLIDATION,A,30000,10.65,10,,3,NO DEFAULT
+17,23,120000,RENT,0,EDUCATION,A,35000,7.9,10,,4,NO DEFAULT
+18,23,92111,RENT,7,MEDICAL,E,35000,20.25,10,N,4,DEFAULT
+19,23,113000,RENT,8,DEBTCONSOLIDATION,C,35000,18.25,10,N,4,DEFAULT
+20,24,10800,MORTGAGE,8,EDUCATION,A,1750,10.99,4,N,2,DEFAULT
+21,25,162500,RENT,2,VENTURE,A,35000,7.49,10,,4,NO DEFAULT
+22,25,137000,RENT,9,PERSONAL,D,34800,16.77,10,Y,2,NO DEFAULT
+23,22,65000,RENT,4,EDUCATION,C,34000,17.58,10,N,4,DEFAULT
+24,24,10980,OWN,0,PERSONAL,A,1500,7.29,4,Y,3,NO DEFAULT
+25,22,80000,RENT,3,PERSONAL,C,33950,14.54,10,Y,4,DEFAULT"""
+
+highest, lowest = find_highest_and_lowest_loan_amnts(data)
+print(f"Highest loan amount: {highest}")
+print(f"Lowest loan amount: {lowest}")
+```
+
+### Explanation
+
+- The function `find_highest_and_lowest_loan_amnts` reads the CSV data, splits it into lines, and extracts the header and data rows.
+- It finds the index of the [`loan_amnt`](command:_github.copilot.openSymbolFromReferences?%5B%22%22%2C%5B%7B%22uri%22%3A%7B%22scheme%22%3A%22file%22%2C%22authority%22%3A%22%22%2C%22path%22%3A%22%2FC%3A%2FUsers%2Fthoma%2FDownloads%2Fimproved%20dataset%2Fimproved%20dataset.csv%22%2C%22query%22%3A%22%22%2C%22fragment%22%3A%22%22%7D%2C%22pos%22%3A%7B%22line%22%3A0%2C%22character%22%3A99%7D%7D%5D%2C%2265b128ee-1e84-4d81-953c-fefd543554c1%22%5D "Go to definition") column and initializes variables to store the highest and lowest loan amounts.
+- It iterates over each data row, extracts the [`loan_amnt`](command:_github.copilot.openSymbolFromReferences?%5B%22%22%2C%5B%7B%22uri%22%3A%7B%22scheme%22%3A%22file%22%2C%22authority%22%3A%22%22%2C%22path%22%3A%22%2FC%3A%2FUsers%2Fthoma%2FDownloads%2Fimproved%20dataset%2Fimproved%20dataset.csv%22%2C%22query%22%3A%22%22%2C%22fragment%22%3A%22%22%7D%2C%22pos%22%3A%7B%22line%22%3A0%2C%22character%22%3A99%7D%7D%5D%2C%2265b128ee-1e84-4d81-953c-fefd543554c1%22%5D "Go to definition") value, and updates the highest and lowest loan amounts accordingly.
+- Finally, it returns the highest and lowest loan amounts.
+
+tnoffsin: Yes, but use all the data without using outside libraries. 
+
+GitHub Copilot: ### Plan
+
+1. Read the CSV data from the string.
+2. Split the data into lines.
+3. Extract the header and data rows.
+4. Parse the [`loan_amnt`](command:_github.copilot.openSymbolFromReferences?%5B%22%22%2C%5B%7B%22uri%22%3A%7B%22scheme%22%3A%22file%22%2C%22authority%22%3A%22%22%2C%22path%22%3A%22%2FC%3A%2FUsers%2Fthoma%2FDownloads%2Fimproved%20dataset%2Fimproved%20dataset.csv%22%2C%22query%22%3A%22%22%2C%22fragment%22%3A%22%22%7D%2C%22pos%22%3A%7B%22line%22%3A0%2C%22character%22%3A99%7D%7D%5D%2C%22a5ca4bcb-bf83-49c4-9f1e-616d1da356e0%22%5D "Go to definition") values from each row.
+5. Determine the highest and lowest [`loan_amnt`](command:_github.copilot.openSymbolFromReferences?%5B%22%22%2C%5B%7B%22uri%22%3A%7B%22scheme%22%3A%22file%22%2C%22authority%22%3A%22%22%2C%22path%22%3A%22%2FC%3A%2FUsers%2Fthoma%2FDownloads%2Fimproved%20dataset%2Fimproved%20dataset.csv%22%2C%22query%22%3A%22%22%2C%22fragment%22%3A%22%22%7D%2C%22pos%22%3A%7B%22line%22%3A0%2C%22character%22%3A99%7D%7D%5D%2C%22a5ca4bcb-bf83-49c4-9f1e-616d1da356e0%22%5D "Go to definition") values.
+6. Return the highest and lowest values.
+
+### Code
+
+```python
+def find_highest_and_lowest_loan_amnts(data):
+    # Split the data into lines
+    lines = data.strip().split('\n')
+    
+    # Extract the header and data rows
+    header = lines[0].split(',')
+    data_rows = lines[1:]
+    
+    # Find the index of the loan_amnt column
+    loan_amnt_index = header.index('loan_amnt')
+    
+    # Initialize variables to store the highest and lowest loan amounts
+    highest_loan_amnt = float('-inf')
+    lowest_loan_amnt = float('inf')
+    
+    # Iterate over each data row
+    for row in data_rows:
+        # Split the row into columns
+        columns = row.split(',')
+        
+        # Get the loan_amnt value and convert it to an integer
+        loan_amnt = int(columns[loan_amnt_index])
+        
+        # Update the highest and lowest loan amounts
+        if loan_amnt > highest_loan_amnt:
+            highest_loan_amnt = loan_amnt
+        if loan_amnt < lowest_loan_amnt:
+            lowest_loan_amnt = loan_amnt
+    
+    return highest_loan_amnt, lowest_loan_amnt
+
+# Example usage
+data = """customer_id,customer_age,customer_income,home_ownership,employment_duration,loan_intent,loan_grade,loan_amnt,loan_int_rate,term_years,historical_default,cred_hist_length,Current_loan_status
+1,22,59000,RENT,123,PERSONAL,C,35000,16.02,10,Y,3,DEFAULT
+2,21,9600,OWN,5,EDUCATION,A,1000,11.14,1,,2,NO DEFAULT
+3,25,9600,MORTGAGE,1,MEDICAL,B,5500,12.87,5,N,3,DEFAULT
+4,23,65500,RENT,4,MEDICAL,B,35000,15.23,10,N,2,DEFAULT
+5,24,54400,RENT,8,MEDICAL,B,35000,14.27,10,Y,4,DEFAULT
+6,21,9900,OWN,2,VENTURE,A,2500,7.14,1,N,2,DEFAULT
+7,26,77100,RENT,8,EDUCATION,A,35000,12.42,10,,3,NO DEFAULT
+8,24,78956,RENT,5,MEDICAL,A,35000,11.11,10,,4,NO DEFAULT
+9,24,83000,RENT,8,PERSONAL,A,35000,8.9,10,,2,NO DEFAULT
+10,21,10000,OWN,6,VENTURE,C,1600,14.74,1,N,3,DEFAULT
+11,22,85000,RENT,6,VENTURE,A,35000,10.37,10,,4,NO DEFAULT
+12,21,10000,OWN,2,HOMEIMPROVEMENT,A,4500,8.63,1,N,2,DEFAULT
+13,23,95000,RENT,2,VENTURE,A,35000,7.9,10,,2,NO DEFAULT
+14,26,108160,RENT,4,EDUCATION,D,35000,18.39,10,N,4,DEFAULT
+15,23,115000,RENT,2,EDUCATION,A,35000,7.9,10,,4,NO DEFAULT
+16,23,500000,MORTGAGE,7,DEBTCONSOLIDATION,A,30000,10.65,10,,3,NO DEFAULT
+17,23,120000,RENT,0,EDUCATION,A,35000,7.9,10,,4,NO DEFAULT
+18,23,92111,RENT,7,MEDICAL,E,35000,20.25,10,N,4,DEFAULT
+19,23,113000,RENT,8,DEBTCONSOLIDATION,C,35000,18.25,10,N,4,DEFAULT
+20,24,10800,MORTGAGE,8,EDUCATION,A,1750,10.99,4,N,2,DEFAULT
+21,25,162500,RENT,2,VENTURE,A,35000,7.49,10,,4,NO DEFAULT
+22,25,137000,RENT,9,PERSONAL,D,34800,16.77,10,Y,2,NO DEFAULT
+23,22,65000,RENT,4,EDUCATION,C,34000,17.58,10,N,4,DEFAULT
+24,24,10980,OWN,0,PERSONAL,A,1500,7.29,4,Y,3,NO DEFAULT
+25,22,80000,RENT,3,PERSONAL,C,33950,14.54,10,Y,4,DEFAULT"""
+
+highest, lowest = find_highest_and_lowest_loan_amnts(data)
+print(f"Highest loan amount: {highest}")
+print(f"Lowest loan amount: {lowest}")
+```
+
+### Explanation
+
+- The function `find_highest_and_lowest_loan_amnts` reads the CSV data, splits it into lines, and extracts the header and data rows.
+- It finds the index of the [`loan_amnt`](command:_github.copilot.openSymbolFromReferences?%5B%22%22%2C%5B%7B%22uri%22%3A%7B%22scheme%22%3A%22file%22%2C%22authority%22%3A%22%22%2C%22path%22%3A%22%2FC%3A%2FUsers%2Fthoma%2FDownloads%2Fimproved%20dataset%2Fimproved%20dataset.csv%22%2C%22query%22%3A%22%22%2C%22fragment%22%3A%22%22%7D%2C%22pos%22%3A%7B%22line%22%3A0%2C%22character%22%3A99%7D%7D%5D%2C%22a5ca4bcb-bf83-49c4-9f1e-616d1da356e0%22%5D "Go to definition") column and initializes variables to store the highest and lowest loan amounts.
+- It iterates over each data row, extracts the [`loan_amnt`](command:_github.copilot.openSymbolFromReferences?%5B%22%22%2C%5B%7B%22uri%22%3A%7B%22scheme%22%3A%22file%22%2C%22authority%22%3A%22%22%2C%22path%22%3A%22%2FC%3A%2FUsers%2Fthoma%2FDownloads%2Fimproved%20dataset%2Fimproved%20dataset.csv%22%2C%22query%22%3A%22%22%2C%22fragment%22%3A%22%22%7D%2C%22pos%22%3A%7B%22line%22%3A0%2C%22character%22%3A99%7D%7D%5D%2C%22a5ca4bcb-bf83-49c4-9f1e-616d1da356e0%22%5D "Go to definition") value, and updates the highest and lowest loan amounts accordingly.
+- Finally, it returns the highest and lowest loan amounts.
+
+tnoffsin: Use data set 1 through 32587. Don't use any outside libraries
+
+GitHub Copilot: ### Plan
+
+1. Read the CSV data from the string.
+2. Split the data into lines.
+3. Extract the header and data rows.
+4. Parse the [`loan_amnt`](command:_github.copilot.openSymbolFromReferences?%5B%22%22%2C%5B%7B%22uri%22%3A%7B%22scheme%22%3A%22file%22%2C%22authority%22%3A%22%22%2C%22path%22%3A%22%2FC%3A%2FUsers%2Fthoma%2FDownloads%2Fimproved%20dataset%2Fimproved%20dataset.csv%22%2C%22query%22%3A%22%22%2C%22fragment%22%3A%22%22%7D%2C%22pos%22%3A%7B%22line%22%3A0%2C%22character%22%3A99%7D%7D%5D%2C%227da778ec-ff74-4319-8d18-ad177a3a8eaa%22%5D "Go to definition") values from each row.
+5. Determine the highest and lowest [`loan_amnt`](command:_github.copilot.openSymbolFromReferences?%5B%22%22%2C%5B%7B%22uri%22%3A%7B%22scheme%22%3A%22file%22%2C%22authority%22%3A%22%22%2C%22path%22%3A%22%2FC%3A%2FUsers%2Fthoma%2FDownloads%2Fimproved%20dataset%2Fimproved%20dataset.csv%22%2C%22query%22%3A%22%22%2C%22fragment%22%3A%22%22%7D%2C%22pos%22%3A%7B%22line%22%3A0%2C%22character%22%3A99%7D%7D%5D%2C%227da778ec-ff74-4319-8d18-ad177a3a8eaa%22%5D "Go to definition") values.
+6. Return the highest and lowest values.
+
+### Code
+
+```python
+def find_highest_and_lowest_loan_amnts(data):
+    # Split the data into lines
+    lines = data.strip().split('\n')
+    
+    # Extract the header and data rows
+    header = lines[0].split(',')
+    data_rows = lines[1:]
+    
+    # Find the index of the loan_amnt column
+    loan_amnt_index = header.index('loan_amnt')
+    
+    # Initialize variables to store the highest and lowest loan amounts
+    highest_loan_amnt = float('-inf')
+    lowest_loan_amnt = float('inf')
+    
+    # Iterate over each data row
+    for row in data_rows:
+        # Split the row into columns
+        columns = row.split(',')
+        
+        # Get the loan_amnt value and convert it to an integer
+        loan_amnt = int(columns[loan_amnt_index])
+        
+        # Update the highest and lowest loan amounts
+        if loan_amnt > highest_loan_amnt:
+            highest_loan_amnt = loan_amnt
+        if loan_amnt < lowest_loan_amnt:
+            lowest_loan_amnt = loan_amnt
+    
+    return highest_loan_amnt, lowest_loan_amnt
+
+# Example usage
+data = """customer_id,customer_age,customer_income,home_ownership,employment_duration,loan_intent,loan_grade,loan_amnt,loan_int_rate,term_years,historical_default,cred_hist_length,Current_loan_status
+1,22,59000,RENT,123,PERSONAL,C,35000,16.02,10,Y,3,DEFAULT
+2,21,9600,OWN,5,EDUCATION,A,1000,11.14,1,,2,NO DEFAULT
+3,25,9600,MORTGAGE,1,MEDICAL,B,5500,12.87,5,N,3,DEFAULT
+4,23,65500,RENT,4,MEDICAL,B,35000,15.23,10,N,2,DEFAULT
+5,24,54400,RENT,8,MEDICAL,B,35000,14.27,10,Y,4,DEFAULT
+6,21,9900,OWN,2,VENTURE,A,2500,7.14,1,N,2,DEFAULT
+7,26,77100,RENT,8,EDUCATION,A,35000,12.42,10,,3,NO DEFAULT
+8,24,78956,RENT,5,MEDICAL,A,35000,11.11,10,,4,NO DEFAULT
+9,24,83000,RENT,8,PERSONAL,A,35000,8.9,10,,2,NO DEFAULT
+10,21,10000,OWN,6,VENTURE,C,1600,14.74,1,N,3,DEFAULT
+11,22,85000,RENT,6,VENTURE,A,35000,10.37,10,,4,NO DEFAULT
+12,21,10000,OWN,2,HOMEIMPROVEMENT,A,4500,8.63,1,N,2,DEFAULT
+13,23,95000,RENT,2,VENTURE,A,35000,7.9,10,,2,NO DEFAULT
+14,26,108160,RENT,4,EDUCATION,D,35000,18.39,10,N,4,DEFAULT
+15,23,115000,RENT,2,EDUCATION,A,35000,7.9,10,,4,NO DEFAULT
+16,23,500000,MORTGAGE,7,DEBTCONSOLIDATION,A,30000,10.65,10,,3,NO DEFAULT
+17,23,120000,RENT,0,EDUCATION,A,35000,7.9,10,,4,NO DEFAULT
+18,23,92111,RENT,7,MEDICAL,E,35000,20.25,10,N,4,DEFAULT
+19,23,113000,RENT,8,DEBTCONSOLIDATION,C,35000,18.25,10,N,4,DEFAULT
+20,24,10800,MORTGAGE,8,EDUCATION,A,1750,10.99,4,N,2,DEFAULT
+21,25,162500,RENT,2,VENTURE,A,35000,7.49,10,,4,NO DEFAULT
+22,25,137000,RENT,9,PERSONAL,D,34800,16.77,10,Y,2,NO DEFAULT
+23,22,65000,RENT,4,EDUCATION,C,34000,17.58,10,N,4,DEFAULT
+24,24,10980,OWN,0,PERSONAL,A,1500,7.29,4,Y,3,NO DEFAULT
+25,22,80000,RENT,3,PERSONAL,C,33950,14.54,10,Y,4,DEFAULT
+... (more data rows up to 32587) ..."""
+
+highest, lowest = find_highest_and_lowest_loan_amnts(data)
+print(f"Highest loan amount: {highest}")
+print(f"Lowest loan amount: {lowest}")
+```
+
+### Explanation
+
+- The function `find_highest_and_lowest_loan_amnts` reads the CSV data, splits it into lines, and extracts the header and data rows.
+- It finds the index of the [`loan_amnt`](command:_github.copilot.openSymbolFromReferences?%5B%22%22%2C%5B%7B%22uri%22%3A%7B%22scheme%22%3A%22file%22%2C%22authority%22%3A%22%22%2C%22path%22%3A%22%2FC%3A%2FUsers%2Fthoma%2FDownloads%2Fimproved%20dataset%2Fimproved%20dataset.csv%22%2C%22query%22%3A%22%22%2C%22fragment%22%3A%22%22%7D%2C%22pos%22%3A%7B%22line%22%3A0%2C%22character%22%3A99%7D%7D%5D%2C%227da778ec-ff74-4319-8d18-ad177a3a8eaa%22%5D "Go to definition") column and initializes variables to store the highest and lowest loan amounts.
+- It iterates over each data row, extracts the [`loan_amnt`](command:_github.copilot.openSymbolFromReferences?%5B%22%22%2C%5B%7B%22uri%22%3A%7B%22scheme%22%3A%22file%22%2C%22authority%22%3A%22%22%2C%22path%22%3A%22%2FC%3A%2FUsers%2Fthoma%2FDownloads%2Fimproved%20dataset%2Fimproved%20dataset.csv%22%2C%22query%22%3A%22%22%2C%22fragment%22%3A%22%22%7D%2C%22pos%22%3A%7B%22line%22%3A0%2C%22character%22%3A99%7D%7D%5D%2C%227da778ec-ff74-4319-8d18-ad177a3a8eaa%22%5D "Go to definition") value, and updates the highest and lowest loan amounts accordingly.
+- Finally, it returns the highest and lowest loan amounts.
+
+tnoffsin: Use all the data in the file. Don't use any outside sources.
+
+GitHub Copilot: ### Plan
+
+1. Read the CSV data from the string.
+2. Split the data into lines.
+3. Extract the header and data rows.
+4. Parse the [`loan_amnt`](command:_github.copilot.openSymbolFromReferences?%5B%22%22%2C%5B%7B%22uri%22%3A%7B%22scheme%22%3A%22file%22%2C%22authority%22%3A%22%22%2C%22path%22%3A%22%2FC%3A%2FUsers%2Fthoma%2FDownloads%2Fimproved%20dataset%2Fimproved%20dataset.csv%22%2C%22query%22%3A%22%22%2C%22fragment%22%3A%22%22%7D%2C%22pos%22%3A%7B%22line%22%3A0%2C%22character%22%3A99%7D%7D%5D%2C%2205b3b1b4-dc64-45f6-b18d-d8f1722ed264%22%5D "Go to definition") values from each row.
+5. Determine the highest and lowest [`loan_amnt`](command:_github.copilot.openSymbolFromReferences?%5B%22%22%2C%5B%7B%22uri%22%3A%7B%22scheme%22%3A%22file%22%2C%22authority%22%3A%22%22%2C%22path%22%3A%22%2FC%3A%2FUsers%2Fthoma%2FDownloads%2Fimproved%20dataset%2Fimproved%20dataset.csv%22%2C%22query%22%3A%22%22%2C%22fragment%22%3A%22%22%7D%2C%22pos%22%3A%7B%22line%22%3A0%2C%22character%22%3A99%7D%7D%5D%2C%2205b3b1b4-dc64-45f6-b18d-d8f1722ed264%22%5D "Go to definition") values.
+6. Return the highest and lowest values.
+
+### Code
+
+```python
+def find_highest_and_lowest_loan_amnts(data):
+    # Split the data into lines
+    lines = data.strip().split('\n')
+    
+    # Extract the header and data rows
+    header = lines[0].split(',')
+    data_rows = lines[1:]
+    
+    # Find the index of the loan_amnt column
+    loan_amnt_index = header.index('loan_amnt')
+    
+    # Initialize variables to store the highest and lowest loan amounts
+    highest_loan_amnt = float('-inf')
+    lowest_loan_amnt = float('inf')
+    
+    # Iterate over each data row
+    for row in data_rows:
+        # Split the row into columns
+        columns = row.split(',')
+        
+        # Get the loan_amnt value and convert it to an integer
+        loan_amnt = int(columns[loan_amnt_index])
+        
+        # Update the highest and lowest loan amounts
+        if loan_amnt > highest_loan_amnt:
+            highest_loan_amnt = loan_amnt
+        if loan_amnt < lowest_loan_amnt:
+            lowest_loan_amnt = loan_amnt
+    
+    return highest_loan_amnt, lowest_loan_amnt
+
+# Example usage
+data = """customer_id,customer_age,customer_income,home_ownership,employment_duration,loan_intent,loan_grade,loan_amnt,loan_int_rate,term_years,historical_default,cred_hist_length,Current_loan_status
+1,22,59000,RENT,123,PERSONAL,C,35000,16.02,10,Y,3,DEFAULT
+2,21,9600,OWN,5,EDUCATION,A,1000,11.14,1,,2,NO DEFAULT
+3,25,9600,MORTGAGE,1,MEDICAL,B,5500,12.87,5,N,3,DEFAULT
+4,23,65500,RENT,4,MEDICAL,B,35000,15.23,10,N,2,DEFAULT
+5,24,54400,RENT,8,MEDICAL,B,35000,14.27,10,Y,4,DEFAULT
+6,21,9900,OWN,2,VENTURE,A,2500,7.14,1,N,2,DEFAULT
+7,26,77100,RENT,8,EDUCATION,A,35000,12.42,10,,3,NO DEFAULT
+8,24,78956,RENT,5,MEDICAL,A,35000,11.11,10,,4,NO DEFAULT
+9,24,83000,RENT,8,PERSONAL,A,35000,8.9,10,,2,NO DEFAULT
+10,21,10000,OWN,6,VENTURE,C,1600,14.74,1,N,3,DEFAULT
+11,22,85000,RENT,6,VENTURE,A,35000,10.37,10,,4,NO DEFAULT
+12,21,10000,OWN,2,HOMEIMPROVEMENT,A,4500,8.63,1,N,2,DEFAULT
+13,23,95000,RENT,2,VENTURE,A,35000,7.9,10,,2,NO DEFAULT
+14,26,108160,RENT,4,EDUCATION,D,35000,18.39,10,N,4,DEFAULT
+15,23,115000,RENT,2,EDUCATION,A,35000,7.9,10,,4,NO DEFAULT
+16,23,500000,MORTGAGE,7,DEBTCONSOLIDATION,A,30000,10.65,10,,3,NO DEFAULT
+17,23,120000,RENT,0,EDUCATION,A,35000,7.9,10,,4,NO DEFAULT
+18,23,92111,RENT,7,MEDICAL,E,35000,20.25,10,N,4,DEFAULT
+19,23,113000,RENT,8,DEBTCONSOLIDATION,C,35000,18.25,10,N,4,DEFAULT
+20,24,10800,MORTGAGE,8,EDUCATION,A,1750,10.99,4,N,2,DEFAULT
+21,25,162500,RENT,2,VENTURE,A,35000,7.49,10,,4,NO DEFAULT
+22,25,137000,RENT,9,PERSONAL,D,34800,16.77,10,Y,2,NO DEFAULT
+23,22,65000,RENT,4,EDUCATION,C,34000,17.58,10,N,4,DEFAULT
+24,24,10980,OWN,0,PERSONAL,A,1500,7.29,4,Y,3,NO DEFAULT
+25,22,80000,RENT,3,PERSONAL,C,33950,14.54,10,Y,4,DEFAULT"""
+
+highest, lowest = find_highest_and_lowest_loan_amnts(data)
+print(f"Highest loan amount: {highest}")
+print(f"Lowest loan amount: {lowest}")
+```
+
+### Explanation
+
+- The function `find_highest_and_lowest_loan_amnts` reads the CSV data, splits it into lines, and extracts the header and data rows.
+- It finds the index of the [`loan_amnt`](command:_github.copilot.openSymbolFromReferences?%5B%22%22%2C%5B%7B%22uri%22%3A%7B%22scheme%22%3A%22file%22%2C%22authority%22%3A%22%22%2C%22path%22%3A%22%2FC%3A%2FUsers%2Fthoma%2FDownloads%2Fimproved%20dataset%2Fimproved%20dataset.csv%22%2C%22query%22%3A%22%22%2C%22fragment%22%3A%22%22%7D%2C%22pos%22%3A%7B%22line%22%3A0%2C%22character%22%3A99%7D%7D%5D%2C%2205b3b1b4-dc64-45f6-b18d-d8f1722ed264%22%5D "Go to definition") column and initializes variables to store the highest and lowest loan amounts.
+- It iterates over each data row, extracts the [`loan_amnt`](command:_github.copilot.openSymbolFromReferences?%5B%22%22%2C%5B%7B%22uri%22%3A%7B%22scheme%22%3A%22file%22%2C%22authority%22%3A%22%22%2C%22path%22%3A%22%2FC%3A%2FUsers%2Fthoma%2FDownloads%2Fimproved%20dataset%2Fimproved%20dataset.csv%22%2C%22query%22%3A%22%22%2C%22fragment%22%3A%22%22%7D%2C%22pos%22%3A%7B%22line%22%3A0%2C%22character%22%3A99%7D%7D%5D%2C%2205b3b1b4-dc64-45f6-b18d-d8f1722ed264%22%5D "Go to definition") value, and updates the highest and lowest loan amounts accordingly.
+- Finally, it returns the highest and lowest loan amounts.
